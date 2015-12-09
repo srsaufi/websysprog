@@ -23,6 +23,7 @@
 				<a href="#" class="list-group-item">Bintang B.</a>
 				<a href="#" class="list-group-item">Bintang W.</a>
 				<a href="#" class="list-group-item">Saufi Rahman</a>
+				<a href="#" class="list-group-item">Irvi Firqotul Aini</a>
 			</div>
 		</div>
 		<br>
