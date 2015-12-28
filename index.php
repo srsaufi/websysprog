@@ -33,10 +33,10 @@
 			<center><h3>Machine Status</h3></center>
 			<hr>
 
-			<center><button class="btn" id="onoff" onclick="loadJSON()" ><img src="img/power-button.gif" height="100" width="100" ></button></center>
+			<center><button class="btn" id="onoff" ><img src="img/power-button.gif" height="100" width="100" ></button></center>
 			<br>
 			<center><p>Status : </p>
-				<div id="status"></div>
+				<div id="status">OFF</div>
 			</center>
 			<br><br><br><br>
 		</div>
@@ -48,8 +48,8 @@
 				<a href="#" class="list-group-item disabled">
 					DETAILS
 				</a>
-				<a href="#" class="list-group-item">KETINGGGIAN : ######</a>
-				<a href="#" class="list-group-item">KECEPATAN : ######</a>
+				<a href="#" class="list-group-item">KETINGGGIAN : <span id="ketinggian"></span></a>
+				
 				
 			</div>
 		</div>
@@ -71,6 +71,52 @@
 	<script>
 
 		$(document ).ready(function(){
+			$("#onoff" ).click(function(){
+				var xmlhttp = new XMLHttpRequest();
+				var url = "http://localhost/sysprogweb/status.json";
+
+				xmlhttp.onreadystatechange=function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						switchONOFF(xmlhttp.responseText);
+					}
+				}
+
+				xmlhttp.open("POST", url, true);
+				xmlhttp.send();
+
+				function switchONOFF(response){
+					var arr = JSON.parse(response);
+					
+					if(arr.status == 1){
+						arr.status = 0;
+						var text = JSON.stringify(arr);
+						$.ajax({
+							type: "POST",
+							url: "createFile.php",
+							data: {data : text}, 
+						
+
+							
+						});
+						document.getElementById("status").innerHTML = "OFF";
+						console.log("1");
+					} else {
+						arr.status = 1;
+						var text = JSON.stringify(arr);
+						
+							$.ajax({
+							type: "POST",
+							url: "createFile.php",
+							data: {data : text}, 
+							
+					});
+						document.getElementById("status").innerHTML = "ON";
+						console.log("2");
+
+					}
+				}
+			});
+
 			var myVar = setInterval(levelWaterUpdate ,1000);
 			function levelWaterUpdate(){
 				var xmlhttp = new XMLHttpRequest();
@@ -81,7 +127,7 @@
 						myFunction(xmlhttp.responseText);
 					}
 				}
-				xmlhttp.open("GET", url, true);
+				xmlhttp.open("POST", url, true);
 				xmlhttp.send();
 				
 				function myFunction(response) {
@@ -94,6 +140,7 @@
 					document.getElementById("levelWater").setAttribute("aria-valuenow", level);
 					document.getElementById("levelWater").setAttribute("style","width :" + level+  "%" );
 					document.getElementById("levelText").innerHTML = level + "%";
+					document.getElementById("ketinggian").innerHTML = (arr.Level/100) + " m";
 				}
 
 			}
@@ -103,7 +150,7 @@
 
 
 
-	</script>
+</script>
 
 </body>
 </html>
