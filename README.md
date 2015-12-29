@@ -12,3 +12,5 @@ format json buat status ON off:
 
 format json buat Level ketinggian:
 {"level" : 100} 100 cm;
+
+curl --data 'data={"Level":"200"}' http://mahasiswa.cs.ui.ac.id/~saufi.rahman/sysprogweb/setLevel.php 
